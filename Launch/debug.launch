@@ -1,0 +1,32 @@
+<launch>
+	<node name="peripheral_manager" pkg="node_control" respawn="true" type="peripheral_manage.py" />
+
+	<node name="safety_cutoff" pkg="node_control" respawn="true" type="safety_motor.py" />
+ 
+	<node name="status_control" pkg="node_control" respawn="true" type="status_control.py" />
+		
+	<node name="mode_select" pkg="node_control" respawn="true" type="mode_select.py" />
+
+	<node name="relative_controller" pkg="node_control" respawn="true" type="relative_position_controller.py" />
+
+	<node name="upper_arduino" pkg="rosserial_python" type="serial_node.py">
+	<param name="port" value="/dev/ttyACM0"/>
+	<param name="baud" value="57600"/>
+	</node>
+
+	<machine 
+		name="peripheral_pi"
+		address="192.168.100.2"
+		user="peripheral"
+		timeout="10"
+		env-loader="~/pi_ws/devel/remote_env_loader.sh"
+	/>
+
+	<node
+		machine="peripheral_pi"
+		name="serial_send"
+		pkg="node_control"
+		type="serial_receive.py"
+	/>
+
+</launch>

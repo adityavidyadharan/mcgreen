@@ -1,0 +1,25 @@
+<launch>
+	<node name="peripheral_arduino_in" pkg="receiver" type="peripheral_arduino_in.py" />
+
+	<node name="safety_motor" pkg="receiver" type="safety_motor.py" />
+ 
+	<node name="status_control" pkg="receiver" type="status_control.py" />
+		
+	<node name="mode_select" pkg="receiver" type="mode_select.py" />
+
+	<machine 
+		name="peripheral_pi"
+		address="192.168.100.2"
+		user="mcgreenpi"
+		timeout="10"
+		env-loader="/home/mcgreenpi/mcgreenpi_ws/devel/remote_env_loader.sh"
+	/>
+
+	<node
+		machine="peripheral_pi"
+		name="serial_send"
+		pkg="receiver"
+		type="serial_send.py"
+	/>
+
+</launch>

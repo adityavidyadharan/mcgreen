@@ -1,0 +1,12 @@
+<launch>
+	<node name="peripheral_in" pkg="receiver" type="peripheral_in.py" />
+
+	<node name="safety_motor" pkg="receiver" type="safety_motor.py" />
+ 
+	<node name="status_control" pkg="receiver" type="status_control.py" />
+		
+	<node name="mode_select" pkg="receiver" type="mode_select.py" />
+
+	<node name="serial_in_receiver" pkg="receiver" type="serial_receive.py" />
+
+</launch>
