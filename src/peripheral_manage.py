@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import rospy
-from node_control.msg import Peripheral, Arm, Sensor, Joystick, Array
+from mcgreen_control.msg import Peripheral, Arm, Sensor, Joystick, Array
 from std_msgs.msg import Int16
 
 class Manager:
@@ -42,9 +42,6 @@ class Manager:
     def receiver_splice(self):
         self.out_receiver.ts = self.receiver_data[4:]
         self.out_receiver.xy = self.receiver_data[3:1:-1] + self.receiver_data[:2]
-        if self.receiver_data[2] == 1518:
-            self.out_receiver.xy=[self.out_receiver.xy[0], 1500, self.out_receiver.xy[2], self.out_receiver.xy[3]]
-        self.data_publish()
     def data_process(self):
         #sensors.ultrasonic = [right_top, right_bottom, left_top, left_bottom]
         self.sensors.ultrasonic = self.right_data.ultra + self.left_data.ultra
@@ -58,4 +55,8 @@ class Manager:
 if __name__ == "__main__":
     rospy.init_node("peripheral_manager")
     peripheral = Manager()
-    rospy.spin()
+    r = rospy.Rate(100)
+    while not rospy.is_shutdown():
+        peripheral.data_publish()
+        r.sleep()
+

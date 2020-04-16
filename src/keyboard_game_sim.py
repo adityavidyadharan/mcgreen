@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import rospy
-from node_control.msg import Peripheral, Arm, Sensor, Joystick
+from mcgreen_control.msg import Peripheral, Arm, Sensor, Joystick
 
 class Game_out:
     OUTPUT_TOPIC = "/game_motors"

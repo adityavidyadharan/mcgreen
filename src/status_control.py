@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import rospy
-from node_control.msg import Peripheral, Arm, Sensor, Joystick, Face
+from mcgreen_control.msg import Peripheral, Arm, Sensor, Joystick, Face
 from std_msgs.msg import Int16
 class feedback_manager:
     FACE_TOPIC_IN = "/dot_matrix"

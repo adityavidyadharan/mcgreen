@@ -1,0 +1,100 @@
+{
+	"point_vals":
+	{
+		"level_easy": [100, 50],
+		"level_medium": [200, 100],
+		"level_hard": [400, 200]
+	},
+
+	"level_easy":
+	[
+
+		{
+			"question": "What is NOT a way to prevent waste?",
+			"choices": 
+			["Littering", "Reduce", "Reuse", "Recycle"],
+			"answer": "Littering"
+		},
+
+		{
+			"question": 
+			"Which thing pollutes the earth?",
+			"choices": 
+			["Cars", "Trees", "Doesn't Matter", "All of the above"],
+			"answer": "Cars"
+		},
+
+		{
+			"question": 
+			"By ______ there will be more plastic in the ocean than fish",
+			"choices": 
+			["2050", "2020", "2080", "2100"],
+			"answer": "2050"
+		},
+
+		{
+			"question": 
+			"What can you ride to reduce your carbon footprint?",
+			"choices": 
+			["Public Transport", "Cars", "Trucks", "Motorcycles"],
+			"answer": "Public Transport"
+		}
+	],
+
+	"level_medium":
+	[
+
+		{
+			"question": "",
+			"choices": ["", "", "", ""],
+			"answer": ""
+		},
+		
+		{
+			"question": "",
+			"choices": ["", "", "", ""],
+			"answer": ""
+		},
+
+		{
+			"question": "",
+			"choices": ["", "", "", ""],
+			"answer": ""
+		},
+
+		{
+			"question": "",
+			"choices": ["", "", "", ""],
+			"answer": ""
+		}
+
+	],
+
+	"level_hard":
+	[
+		{
+			"question": "",
+			"choices": ["", "", "", ""],
+			"answer": ""
+		},
+
+		{
+			"question": "",
+			"choices": ["", "", "", ""],
+			"answer": ""
+		},
+
+		{
+			"question": "",
+			"choices": ["", "", "", ""],
+			"answer": ""
+		},
+
+		{
+			"question": "",
+			"choices": ["", "", "", ""],
+			"answer": ""
+		}
+	]
+
+}

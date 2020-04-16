@@ -1,7 +1,11 @@
 #!/usr/bin/python
 import rospy
-from node_control.msg import Peripheral, Arm, Sensor, Joystick, Array
+from mcgreen_control.msg import Peripheral, Arm, Sensor, Joystick, Array
+from numpy import interp
 from std_msgs.msg import Int16
+
+
+
 class safety_break:
     TOGGLE_TOPIC="/receiver"
     UPPER_IN = "/upper_motors"
@@ -17,8 +21,8 @@ class safety_break:
         self.feedback = Int16()
         self.feedback.data = 1
         self.safe = 1
-        self.upper = [1500]*2
-        self.lower = [1500]*2
+        self.upper = [1500]*2 + [90] * 2
+        self.lower = [1500]*4
         self.up_sub = rospy.Subscriber(self.UPPER_IN, Array, self.up_update)
         self.low_sub = rospy.Subscriber(self.LOWER_IN, Array, self.low_update)
         self.sensor_sub = rospy.Subscriber(self.US_TOPIC, Sensor, self.sensor_update)
@@ -29,11 +33,9 @@ class safety_break:
         self.safety_feedback_pub.publish(self.feedback)
         self.us=[50]*4
     def up_update(self,data):
-        self.upper = data.arr
-        self.update()
+        self.upper = list(data.arr)
     def low_update(self,data):
-        self.lower = data.arr
-        self.update()
+        self.lower = list(data.arr)
     def sensor_update(self, data):
         #Replace 0's with old value
         for old, new in zip(self.us, enumerate(data.ultrasonic)):
@@ -41,32 +43,33 @@ class safety_break:
                 #data.ultrasonic[b[0]]=2000
                 data.ultrasonic[b[0]]=old
         self.us = data.ultrasonic
-        self.update()
     def toggle_update(self, data):
-        self.safety_clear = data.ts[5]
-        self.update()
+        try:
+            self.safety_clear = data.ts[5]
+        except IndexError:
+            print ("Waiting for receiver data")
     def update(self):
+        # upper_safe = [arm_left, arm_right, head_x, head_y]
         if all(item < self.threshold for item in self.us):
-            self.upper_safe.arr = [1500]*4
             self.lower_safe.arr = [1500]*4
             self.safe = 0
         if self.safe == 0 and self.safety_clear == 2000:
             self.safe = 1
         if self.safe == 1:
-            self.upper_safe.arr = self.upper
             self.lower_safe.arr = self.lower
         if self.safe != self.feedback.data:
             self.feedback.data = self.safe
             self.safety_feedback_pub.publish(self.feedback)
-        #self.upper_pub.publish(self.upper_safe)
-        #self.lower_pub.publish(self.lower_safe)
+        self.upper_safe.arr = self.upper
+        self.upper_pub.publish(self.upper_safe)
+        self.lower_pub.publish(self.lower_safe)
 
 
 if __name__ == "__main__":
     rospy.init_node("safety_cutoff")
     safe = safety_break()
+    #rospy.spin()
     r = rospy.Rate(50)
     while not rospy.is_shutdown():
-        safe.upper_pub.publish(safe.upper_safe)
-        safe.lower_pub.publish(safe.lower_safe)
+        safe.update()
         r.sleep()

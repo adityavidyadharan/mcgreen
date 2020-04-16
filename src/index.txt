@@ -1,0 +1,4 @@
+Description of Files:
+
+keyboard_game_sim.py		Simple input reader to publish to /game_data
+mode_select.py			Manage data to appropriate topics based on remote select

@@ -3,7 +3,7 @@ import time
 import serial
 import chardet
 import rospy
-from node_control.msg import Peripheral, Arm, Sensor, Joystick
+from mcgreen_control.msg import Peripheral, Arm, Sensor, Joystick
 from binascii import hexlify
 from binascii import unhexlify
 from threading import Timer
