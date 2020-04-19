@@ -24,6 +24,13 @@
 		type="servo_gpio.py"
 	/>
 	
+	<node
+		machine="upper_pi"
+		name="screen_controller"
+		pkg="mcgreen_control"
+		type="oled.py"
+	/>
+
 	<machine 
 		
 		name="lower_pi"

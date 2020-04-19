@@ -73,27 +73,33 @@
 	"level_hard":
 	[
 		{
-			"question": "",
-			"choices": ["", "", "", ""],
-			"answer": ""
+			"question": "Which light source is the most energy efficient?",
+			"choices": ["LED Bulb", "Fluorescent Bulb", "Incandescent Bulb", "A Candle"],
+			"answer": "LED Bulb"
 		},
 
 		{
-			"question": "",
-			"choices": ["", "", "", ""],
-			"answer": ""
+			"question": "What is the unit of measurement for electrical power",
+			"choices": ["Ohm", "Watt", "Volt", "Ampere"],
+			"answer": "Watt"
 		},
 
 		{
-			"question": "",
-			"choices": ["", "", "", ""],
-			"answer": ""
+			"question": "Which type of current flows in only one direction?",
+			"choices": ["DC", "AC", "Neither", "Both"],
+			"answer": "DC"
 		},
 
 		{
-			"question": "",
-			"choices": ["", "", "", ""],
-			"answer": ""
+			"question": "Why should we buy energy-efficient appliances?",
+			"choices": ["Lower electric bills", "Save money", "Burn less fossil fuels", "All of the above"],
+			"answer": "All of the above"
+		},
+
+		{
+			"question": "Which energy source is used the most in the US?",
+			"choices": ["Nuclear power", "Coal", "Natural gas", "Solar power"],
+			"answer": "Natural gas"
 		}
 	]
 
