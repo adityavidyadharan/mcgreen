@@ -37,4 +37,4 @@ if __name__=="__main__":
         face_controller = Head_comm("init")
         rospy.spin()
     except KeyboardInterrupt:
-        print("keyboard interrupt")
+        pass

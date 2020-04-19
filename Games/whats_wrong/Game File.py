@@ -4,6 +4,8 @@ import time
 import sys
 sys.path.append("../")
 from head_controller import Head_comm
+import random
+import threading
 
 controller = Head_comm("What's Wrong with the Room")
 
@@ -73,11 +75,56 @@ clock = pygame.time.Clock()
 
 start_time = pygame.time.get_ticks()
 
+#threading trackers
+active_head = 0
+active_face = 0
 
+#threaded function
+#set vertical = true for vertical movement (auto x = 90) false for opposite
+def rotate_head(vertical, positions):
+    global active_head
+    print("---------------", flush=True)
+    print("vertical: ", vertical, flush=True)
+    print("positions: ", positions, flush=True)
+    if active_head == 0:
+        active_head +=1
+        current_pos = 90
+        for x in positions:
+            print("x: ", x, flush=True)
+            if vertical == True:
+                controller.head_update([90, x])
+            else:
+                controller.head_update([x,90])
+            print("servo update sent", flush=True)
+            delay = float(abs(current_pos - x)) / 60. *.14*3
+            print("delay: ", delay, flush=True)
+            time.sleep(delay)
+            current_pos = x
+        active_head -= 1
+
+#threaded function
+#change face and then revert to normal after x time
+
+def change_face(expression, delay):
+    global active_face
+    print("+++++++++++++++++++++++++++++++++=", flush=True)
+    print ("expression: ", expression, flush=True)
+    print("delay: ", delay, flush=True)
+    #print("name: ", str(threading.current_thread().name))
+    print("count: ", active_face)
+    if active_face == 0:
+        active_face += 1
+        controller.face_update(expression)
+        print("face update sent", flush=True)
+        time.sleep(delay)
+        controller.face_update(4)
+        print("face reset sent", flush=True)
+        active_face -= 1
 def intro():
     mixer.music.load('backgroundmsc.wav')
     mixer.music.play(-1)
     controller.face_update(4)  # HHHHHHHHHHHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRRRRREEEEEEEEEEEEEE
+    controller.head_update([90,90])
     bmenu = True
     while bmenu:
         screen.fill((255, 255, 255))
@@ -170,9 +217,11 @@ def gamewin():
     controller.face_update(face)
     # These commands won't over write themselves right? like if i say these three in a row
     # it'll hit all of the positions before going back to [90,90]?
-    controller.head_update([90, 45])
-    controller.head_update([90, 135])
-    controller.head_update([90, 90])
+    # controller.head_update([90, 45])
+    # controller.head_update([90, 135])
+    # controller.head_update([90, 90])
+    rotate=threading.Thread(target=rotate_head, args=(True, [45, 135, 90]))
+    rotate.start()
     bgame = True
     mixer.music.load('game_won.wav')
     mixer.music.play()
@@ -193,10 +242,12 @@ def gamewin():
 def gamelose():
     face = random.randint(5, 7)  # HHHHHHHHHHHHHHEEEEEEEEEEEEERRRRRRRRRRRREEEEEEEEEEEE
     controller.face_update(face)
-    # See game_won head update comments
-    controller.head_update([45, 90])
-    controller.head_update([135, 90])
-    controller.head_update([90, 90])
+    #See game_won head update comments
+    # controller.head_update([45, 90])
+    # controller.head_update([135, 90])
+    # controller.head_update([90, 90])
+    rotate=threading.Thread(target=rotate_head, args=(False, [45, 135, 90]))
+    rotate.start()
     bgame = True
     mixer.music.load('game_lose.wav')
     mixer.music.play()
@@ -246,11 +297,14 @@ def level1():
             screen.blit(obj1pic, (750, 90))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj1pic = opencurtains
                 obj1 = False
         else:
@@ -259,11 +313,14 @@ def level1():
             screen.blit(obj2pic, (280, 230))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
-                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
+                # # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj2pic = paperrecycling
                 obj2 = False
         else:
@@ -272,11 +329,14 @@ def level1():
             screen.blit(obj3pic, (58, 265))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj3pic = compost
                 obj3 = False
         else:
@@ -285,11 +345,14 @@ def level1():
             screen.blit(obj4pic, (440, 315))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj4pic = laptopoff
                 obj4 = False
         else:
@@ -346,11 +409,14 @@ def level2():
             screen.blit(obj1pic, (540, 370))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj1pic = ipad
                 obj1 = False
         else:
@@ -359,11 +425,14 @@ def level2():
             screen.blit(obj2pic, (240, 365))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj2pic = whiteboard
                 obj2 = False
         else:
@@ -372,11 +441,14 @@ def level2():
             screen.blit(obj3pic, (20, 420))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj3pic = reusablewb
                 obj3 = False
         else:
@@ -385,11 +457,14 @@ def level2():
             screen.blit(obj4pic, (650, 120))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj4pic = closedwindow
                 obj4 = False
         else:
@@ -398,11 +473,14 @@ def level2():
             screen.blit(obj5pic, (290, 240))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj5pic = lightoff
                 obj5 = False
         else:
@@ -468,11 +546,14 @@ def level3():
             screen.blit(obj1pic, (550, 540))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj1pic = recyclingarrow
                 obj1 = False
         else:
@@ -481,11 +562,14 @@ def level3():
             screen.blit(obj2pic, (375, 325))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj2pic = towels
                 obj2 = False
         else:
@@ -494,11 +578,14 @@ def level3():
             screen.blit(obj3pic, (640, 305))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj3pic = pottedplant
                 obj3 = False
         else:
@@ -507,11 +594,14 @@ def level3():
             screen.blit(obj4pic, (265, 300))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj4pic = blank
                 obj4 = False
         else:
@@ -520,11 +610,14 @@ def level3():
             screen.blit(obj5pic, (5, 345))
             if click[0] == 1:
                 face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
-                controller.face_update(face)
+                good_face = threading.Thread(target=change_face, args=(face, 0.5,))
+                good_face.daemon=True
+                good_face.start()
+                # controller.face_update(face)
                 # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
                 # either way i'll include and u can play around
                 # time.sleep(2)
-                controller.face_update(4)
+                # controller.face_update(4)
                 obj5pic = tick
                 obj5 = False
         else:

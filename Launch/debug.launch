@@ -26,7 +26,6 @@
 	/>
 
 	<machine 
-		
 		name="lower_pi"
 		address="lower_pi"
 		user="lowerpi"

@@ -7,11 +7,11 @@ import json
 from PIL import Image
 import random
 import sys
-
+import threading
 #UNCOMMENT BOTTOM TWO LINES BEFORE USING BOTTOM TWO LINES
 sys.path.append("../")
 from head_controller import Head_comm
-controller = Head_comm()
+controller = Head_comm("Sustainability Quiz")
 
 #Screen size of window
 window_size = (1920,1080)
@@ -126,6 +126,8 @@ def moveHeadLeftRight():
     #Delay for moveDelay seconds
     time.sleep(moveDelay)
     controller.head_update([rightDegree, 90])
+    time.sleep(moveDelay)
+    controller.head_update([90, 90])
 
 #Generate Sustainability Bar for game WORKS
 def generate_bar(surfaceName, x, y, num_right, num_wrong, num_questions, color):
@@ -153,7 +155,7 @@ def generate_q_page(surfaceName, status, pt_inc, question, choices, correct_ans)
     button_w = 750 / 2; button_h = 250 / 2
     
     #Reference x, y coordinates for upper left button
-    ref_x = window_size[0] / 4; ref_y = window_size[1] / 4;
+    ref_x = window_size[0] / 4; ref_y = window_size[1] / 4
 
     row_spacing = button_w + 100
     column_spacing = button_h + 100

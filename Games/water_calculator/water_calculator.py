@@ -3,6 +3,8 @@
 
 import pygame
 from PIL import Image
+import threading
+import random
 
 #Define class for water-using appliances
 class Appliance:
