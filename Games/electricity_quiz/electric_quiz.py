@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #Electric Quiz Game for MC Green robot
 #Designed and written by Manas Harbola (harbolam@mcvts.net) on behalf of Middlesex County Academy
 
@@ -5,7 +6,9 @@ import pygame
 import json
 from PIL import Image
 import random
-
+import sys
+sys.path.append("../")
+from face_controller import Face_comm
 #Screen size of window
 window_size = (1920,1080)
 
@@ -91,6 +94,7 @@ def makeFace():
     #There are 8 total possible faces (first being happy)
     #Just randomly choose between the first three faces
     faces [1,2,3,4,5,6,7,8]
+    Face_comm.face_update
     faceNum = 0
     return faceNum
 

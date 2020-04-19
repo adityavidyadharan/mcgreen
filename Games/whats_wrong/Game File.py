@@ -1,6 +1,11 @@
 import pygame
 from pygame import mixer
 import time
+import sys
+sys.path.append("../")
+from head_controller import Head_comm
+
+controller = Head_comm("What's Wrong with the Room")
 
 pygame.init()
 screen = pygame.display.set_mode((926, 634))
@@ -72,6 +77,7 @@ start_time = pygame.time.get_ticks()
 def intro():
     mixer.music.load('backgroundmsc.wav')
     mixer.music.play(-1)
+    controller.face_update(4)  # HHHHHHHHHHHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRRRRREEEEEEEEEEEEEE
     bmenu = True
     while bmenu:
         screen.fill((255, 255, 255))
@@ -160,8 +166,13 @@ def level_select():
 
 
 def gamewin():
-    #DISPLAY ONE OF THE HAPPY FACES HERE (CAN YOU RANDOM GEN TO MAKE IT SELECT ANY ONE OF THE THREE?) !!!!!!!!!!!!!!!
-    # DISPLAY THE SURPRISED FACE HERE FOR 1 SECOND AND REVERT BACK TO NEUTRAL
+    face = random.randint(1, 3)  # HEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRREEEEEEEEEEEEEE
+    controller.face_update(face)
+    # These commands won't over write themselves right? like if i say these three in a row
+    # it'll hit all of the positions before going back to [90,90]?
+    controller.head_update([90, 45])
+    controller.head_update([90, 135])
+    controller.head_update([90, 90])
     bgame = True
     mixer.music.load('game_won.wav')
     mixer.music.play()
@@ -180,8 +191,12 @@ def gamewin():
 
 
 def gamelose():
-    #DISPLAY ONE OF THE SAD FACES HERE (CAN YOU RANDOM GEN TO MAKE IT SELECT ANY ONE OF THE THREE?) !!!!!!!!!!!!!!!
-    # DISPLAY THE SURPRISED FACE HERE FOR 1 SECOND AND REVERT BACK TO NEUTRAL
+    face = random.randint(5, 7)  # HHHHHHHHHHHHHHEEEEEEEEEEEEERRRRRRRRRRRREEEEEEEEEEEE
+    controller.face_update(face)
+    # See game_won head update comments
+    controller.head_update([45, 90])
+    controller.head_update([135, 90])
+    controller.head_update([90, 90])
     bgame = True
     mixer.music.load('game_lose.wav')
     mixer.music.play()
@@ -230,6 +245,12 @@ def level1():
         if 850 > mouse[0] > 750 and 220 > mouse[1] > 90:
             screen.blit(obj1pic, (750, 90))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj1pic = opencurtains
                 obj1 = False
         else:
@@ -237,6 +258,12 @@ def level1():
         if 380 > mouse[0] > 280 and 360 > mouse[1] > 210:
             screen.blit(obj2pic, (280, 230))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj2pic = paperrecycling
                 obj2 = False
         else:
@@ -244,6 +271,12 @@ def level1():
         if 165 > mouse[0] > 58 and 410 > mouse[1] > 265:
             screen.blit(obj3pic, (58, 265))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj3pic = compost
                 obj3 = False
         else:
@@ -251,6 +284,12 @@ def level1():
         if 550 > mouse[0] > 440 and 380 > mouse[1] > 315:
             screen.blit(obj4pic, (440, 315))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj4pic = laptopoff
                 obj4 = False
         else:
@@ -306,6 +345,12 @@ def level2():
         if 605 > mouse[0] > 550 and 425 > mouse[1] > 390:
             screen.blit(obj1pic, (540, 370))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj1pic = ipad
                 obj1 = False
         else:
@@ -313,6 +358,12 @@ def level2():
         if 320 > mouse[0] > 240 and 410 > mouse[1] > 365:
             screen.blit(obj2pic, (240, 365))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj2pic = whiteboard
                 obj2 = False
         else:
@@ -320,6 +371,12 @@ def level2():
         if 60 > mouse[0] > 20 and 500 > mouse[1] > 420:
             screen.blit(obj3pic, (20, 420))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj3pic = reusablewb
                 obj3 = False
         else:
@@ -327,6 +384,12 @@ def level2():
         if 820 > mouse[0] > 650 and 290 > mouse[1] > 120:
             screen.blit(obj4pic, (650, 120))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj4pic = closedwindow
                 obj4 = False
         else:
@@ -334,6 +397,12 @@ def level2():
         if 345 > mouse[0] > 280 and 290 > mouse[1] > 230:
             screen.blit(obj5pic, (290, 240))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj5pic = lightoff
                 obj5 = False
         else:
@@ -398,6 +467,12 @@ def level3():
         if 625 > mouse[0] > 550 and 605 > mouse[1] > 540:
             screen.blit(obj1pic, (550, 540))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj1pic = recyclingarrow
                 obj1 = False
         else:
@@ -405,6 +480,12 @@ def level3():
         if 450 > mouse[0] > 350 and 380 > mouse[1] > 300:
             screen.blit(obj2pic, (375, 325))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj2pic = towels
                 obj2 = False
         else:
@@ -412,6 +493,12 @@ def level3():
         if 680 > mouse[0] > 640 and 370 > mouse[1] > 335:
             screen.blit(obj3pic, (640, 305))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj3pic = pottedplant
                 obj3 = False
         else:
@@ -419,6 +506,12 @@ def level3():
         if 340 > mouse[0] > 265 and 355 > mouse[1] > 300:
             screen.blit(obj4pic, (265, 300))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj4pic = blank
                 obj4 = False
         else:
@@ -426,6 +519,12 @@ def level3():
         if 160 > mouse[0] > 5 and 535 > mouse[1] > 345:
             screen.blit(obj5pic, (5, 345))
             if click[0] == 1:
+                face = random.randint(1, 3)  # HHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEE
+                controller.face_update(face)
+                # should i delay here? cuz it's gonna delay the entire program or is that on ur end?
+                # either way i'll include and u can play around
+                # time.sleep(2)
+                controller.face_update(4)
                 obj5pic = tick
                 obj5 = False
         else:
