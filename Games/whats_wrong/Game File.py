@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import pygame
 from pygame import mixer
 import time
@@ -7,7 +8,7 @@ from head_controller import Head_comm
 import random
 import threading
 
-controller = Head_comm("What's Wrong with the Room")
+controller = Head_comm("What's Wrong")
 
 pygame.init()
 screen = pygame.display.set_mode((926, 634))
@@ -96,7 +97,7 @@ def rotate_head(vertical, positions):
             else:
                 controller.head_update([x,90])
             print("servo update sent", flush=True)
-            delay = float(abs(current_pos - x)) / 60. *.14*3
+            delay = float(abs(current_pos - x)) / 60. *.14*5
             print("delay: ", delay, flush=True)
             time.sleep(delay)
             current_pos = x

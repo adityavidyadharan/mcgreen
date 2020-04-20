@@ -7,11 +7,12 @@ import json
 from PIL import Image
 import random
 import sys
+import threading
 
 #UNCOMMENT BOTTOM TWO LINES BEFORE USING BOTTOM TWO LINES
 sys.path.append("../")
 from head_controller import Head_comm
-controller = Head_comm()
+controller = Head_comm("elec quiz")
 
 #Screen size of window
 window_size = (1920,1080)

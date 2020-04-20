@@ -11,7 +11,7 @@ import threading
 #UNCOMMENT BOTTOM TWO LINES BEFORE USING BOTTOM TWO LINES
 sys.path.append("../")
 from head_controller import Head_comm
-controller = Head_comm("Sustainability Quiz")
+controller = Head_comm("Sust. Quiz")
 
 #Screen size of window
 window_size = (1920,1080)

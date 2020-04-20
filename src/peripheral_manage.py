@@ -6,28 +6,30 @@ from std_msgs.msg import Int16
 class Manager:
     RECEIVER_OUTPUT_TOPIC =  "/receiver_output"
     LEFT_TOPIC = "left_arm_send"
-    RIGHT_TOPIC = "right_arm_send" 
+    RIGHT_TOPIC = "sensor/right_arm" 
     RECEIVER_TOPIC = "/receiver"
-    TOGGLE_TOPIC = "/toggle_switches" #deleted
-    MOTOR_TOPIC = "/receiver_motors" #deleted
     SENSOR_TOPIC = "/sensor_data" 
-
-    initial_ultra=50
+    FACE_TOPIC = "/facial_expression"
+    initial_ultra=rospy.get_param("sensor/default_ultra")
     def __init__(self):
         self.rec_sub = rospy.Subscriber(self.RECEIVER_OUTPUT_TOPIC, Array, self.receiver_callback)
         self.left_sub = rospy.Subscriber(self.LEFT_TOPIC, Arm, self.right_arm_callback)
         self.right_sub = rospy.Subscriber(self.RIGHT_TOPIC, Arm, self.left_arm_callback)
         self.rec_pub = rospy.Publisher(self.RECEIVER_TOPIC, Peripheral, queue_size = 1)
         self.sensor_pub = rospy.Publisher(self.SENSOR_TOPIC, Sensor, queue_size = 1)
+        face_pub = rospy.Publisher(self.FACE_TOPIC, Int16, queue_size=1)
+        face = Int16()
+        face.data=4
+        face_pub.publish(face)
         #Intiate variables
         self.sensors = Sensor()
         self.out_receiver = Peripheral()
         #Arm initial values
         self.left_data=Arm()
-        self.left_data.ultra=[self.initial_ultra]*2
+        self.left_data.ultra=self.initial_ultra
         self.right_data=Arm()
-        self.right_data.ultra=[self.initial_ultra]*2
-        self.sensors.ultrasonic=[self.initial_ultra]*4
+        self.right_data.ultra=self.initial_ultra
+        self.sensors.ultrasonic=[self.initial_ultra]*2
     def right_arm_callback(self, data):
         self.left_data = data
         self.data_process()
@@ -44,7 +46,7 @@ class Manager:
         self.out_receiver.xy = self.receiver_data[3:1:-1] + self.receiver_data[:2]
     def data_process(self):
         #sensors.ultrasonic = [right_top, right_bottom, left_top, left_bottom]
-        self.sensors.ultrasonic = self.right_data.ultra + self.left_data.ultra
+        self.sensors.ultrasonic = [self.left_data.ultra, self.right_data.ultra]
         #sensors.arm_angles=[right_arm, left_arm]
         self.sensors.arm_angles=[10,10]
     def data_publish(self):

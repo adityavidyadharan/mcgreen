@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 import rospy
 # from node_control.msg import Peripheral, Arm, Sensor, Joystick, Array
-from std_msgs.msg import Int16
-from std_msgs.msg import String
+from std_msgs.msg import Int16, String, Bool
 from mcgreen_control.msg import Array
 from luma.core.interface.serial import i2c, spi
 from luma.core.render import canvas
@@ -23,23 +22,49 @@ class Screen:
 	MODE_TOPIC = "/mode_feedback"
 	GAME_TOPIC = "/current_game"
 	UPPER_TOPIC = "/upper_safety"
+	EXPRESSION_TOPIC = "/dot_matrix"
+	LOWER_TOPIC = "/lower_safety"
+	SAFETY_TOPIC = "/safety_feedback"
 	def __init__(self):
 		self.mode_sub = rospy.Subscriber(self.MODE_TOPIC, Int16, self.mode_set)
 		self.game_sub = rospy.Subscriber(self.GAME_TOPIC, String, self.game_set)
 		self.upper_sub = rospy.Subscriber(self.UPPER_TOPIC, Array, self.upper_set)
+		self.face_sub  = rospy.Subscriber(self.EXPRESSION_TOPIC, Int16, self.face_set)
+		self.safety_sub = rospy.Subscriber(self.SAFETY_TOPIC, Bool, self.safety_set)
 		self.mode = 1
 		self.game = ""
-		self.head=[90,90]
+		self.face = "Neutral"
+		self.upper=[1500] * 2 + [90] * 2
+		self.lower=[1500] * 4
+		self.safe = "SAFE"
 		self.line = 0
+		self.time = 0
 
 	def mode_set(self, data):
 		self.mode = data.data
 
+	def safety_set(self, data):
+		if data.data == True:
+			self.safe = "SAFE"
+		else:
+			self.safe = "WARNING"
+
 	def upper_set(self, data):
-		self.head = data.arr[2:]
-		# print("value: " + str(self.head))
+		self.upper = data.arr
+
 	def game_set(self, data):
 		self.game = data.data
+
+	def face_set(self, data):
+		self.face = data.data
+		if self.face == 0:
+			self.face = "Warn"
+		elif self.face < 4:
+			self.face = "Happy " + str(self.face)
+		elif self.face >4:
+			self.face = "Sad " + str(self.face)
+		else:
+			self.face = "Neutral"
 
 	def display(self):
 		self.line = 0
@@ -55,10 +80,19 @@ class Screen:
 			self.write_text("Mode: " + str(self.mode), draw)
 			self.write_text("Game: " + self.game, draw)
 			self.write_text("Head Position: ", draw)
-			self.write_text(str(self.head), draw)
+			self.write_text(str(self.upper[2:]), draw)
+			self.write_text("Face: " + str(self.face), draw)
+			self.write_text("", draw)
+			self.write_text("Status: ", draw)
+			if self.safe == "SAFE":
+				self.write_text(self.safe, draw)
+			elif self.time >= 5:
+				self.write_text(self.safe, draw)
+			if self.time == 10:
+				self.time = 0
 			#self.d(draw)
 			#draw.text((0, 45), "Game: RECYCLE DA" + self.game, font=font, fill="white")
-
+		self.time += 1
 	def write_text(self, text, draw): # if text is too long it returns the text with \n
 		w = font.getsize(text)[0]
 		h = font.getsize(text)[1]
@@ -78,7 +112,7 @@ class Screen:
 				current_w = font.getsize(text[begin:i+1])[0]
 				current_h = font.getsize(text[begin:i+1])[1]
 				#end += 1
-				print(text[begin:i+1], current_w)
+				# print(text[begin:i+1], current_w)
 				if current_w > 128:
 					#modified_text += '\n' + text[i]
 					draw.text((0, self.line), text[begin:i], font=font, fill="white")
@@ -92,9 +126,9 @@ class Screen:
 			h = font.getsize(text[begin:length+1])[1]
 			self.line += line_height
 			 
-		print(device.width)
-		print(h)
-		print(w)
+		# print(device.width)
+		# print(h)
+		# print(w)
 			
 	def d(self, draw):
 		draw.text((0, 45), "Game: RECYCLE DA" + self.game, font=font, fill="white")

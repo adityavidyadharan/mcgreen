@@ -1,13 +1,30 @@
 <launch>
+
+	<node name="face_prime" pkg="rostopic" type="rostopic" args="pub /facial_expression std_msgs/Int16 4"/>
+
 	<node name="peripheral_manager" pkg="mcgreen_control" respawn="true" type="peripheral_manage.py" />
 
-	<node name="safety_cutoff" pkg="mcgreen_control" respawn="true" type="safety_motor.py" />
-
-	<node name="mode_select" pkg="mcgreen_control" respawn="true" type="mode_select.py" />
+	<node name="mode_select" pkg="mcgreen_control" respawn="true" type="mode_select.py">
  
-	<node name="status_control" pkg="mcgreen_control" respawn="true" type="status_control.py" />
+		<param name="speed_multiplier" value="2"/>
+		<param name="joystick_threshold" value="2"/>
 
-	<node name="relative_controller" pkg="mcgreen_control" respawn="true" type="relative_position_controller.py" />
+	</node>
+	
+	<group ns="sensor">
+	
+		<param name="rate" value="100" type="int"/>
+		
+		<param name="default_ultra" value="80" type="int"/>
+
+		<param name="threshold_ultra" value="40" type="int" />
+
+		<node name="right_arm" pkg="mcgreen_control" respawn="true" type="arm_sensors.py"> 
+			<param name="side" value="right"/>
+			<param name="topic" value="right_arm"/>
+		</node>
+
+	</group>
 
 	<machine 
 		name="upper_pi"
@@ -17,6 +34,12 @@
 		env-loader="~/upper_ws/devel/remote_env_loader.sh"
 	/>
 
+	<node
+		machine="upper_pi"
+		name="servo_controller"
+		pkg="mcgreen_control"
+		type="servo_gpio.py"
+	/>
 	
 	<node
 		machine="upper_pi"
@@ -26,6 +49,7 @@
 	/>
 
 	<machine 
+		
 		name="lower_pi"
 		address="lower_pi"
 		user="lowerpi"

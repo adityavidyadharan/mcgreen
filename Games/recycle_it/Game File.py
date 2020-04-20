@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import pygame
 from pygame import mixer
 import random
@@ -9,7 +10,7 @@ import threading
 sys.path.append("../")
 from head_controller import Head_comm
 
-controller = Head_comm("Recycle It or Not!")
+controller = Head_comm("Recycle It")
 
 # Initialize pygame
 pygame.init()
@@ -180,7 +181,7 @@ def rotate_head(vertical, positions):
             else:
                 controller.head_update([x,90])
             print("servo update sent", flush=True)
-            delay = float(abs(current_pos - x)) / 60. *.14*3
+            delay = float(abs(current_pos - x)) / 60. *.14*5
             print("delay: ", delay, flush=True)
             time.sleep(delay)
             current_pos = x
