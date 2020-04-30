@@ -51,6 +51,7 @@ class Mode_selector:
             if self.mode == 1:
                 if self.up_down == 1:
                     lower_data=self.receiver_joystick
+                    upper_data=self.out_upper.arr
                 if self.up_down == 0:
                     upper_data=self.receiver_joystick[:-2]
                     #move data from scroll wheels to replace left joystick
