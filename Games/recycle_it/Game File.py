@@ -11,7 +11,6 @@ sys.path.append("../")
 from head_controller import Head_comm
 
 controller = Head_comm("Recycle It")
-
 # Initialize pygame
 pygame.init()
 
@@ -292,7 +291,7 @@ def intro():
                 quit()
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        print(click)
+        # print(click)
         if 360 + 220 > mouse[0] > 360 and 80 + 70 > mouse[1] > 80:
             if click[0] == 1:
                 level_select(level)

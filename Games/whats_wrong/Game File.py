@@ -8,7 +8,7 @@ from head_controller import Head_comm
 import random
 import threading
 
-controller = Head_comm("What's Wrong")
+controller = Head_comm("W Wrong?")
 
 pygame.init()
 screen = pygame.display.set_mode((926, 634))
