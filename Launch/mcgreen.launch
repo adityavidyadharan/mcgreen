@@ -1,39 +1,20 @@
 <launch>
 
-	<node name="face_prime" pkg="rostopic" type="rostopic" args="pub /facial_expression std_msgs/Int16 4"/>
-
-	<node name="peripheral_manager" pkg="mcgreen_control" respawn="true" type="peripheral_manage.py" />
-
-	<node name="safety_cutoff" pkg="mcgreen_control" respawn="true" type="safety_motor.py" />
-
-	<node name="mode_select" pkg="mcgreen_control" respawn="true" type="mode_select.py">
- 
-		<param name="speed_multiplier" value="2"/>
-		<param name="joystick_threshold" value="2"/>
-
-	</node>
-	
-	<group ns="sensor">
-	
-		<param name="rate" value="100" type="int"/>
-		
-		<param name="default_ultra" value="80" type="int"/>
-
-		<param name="threshold_ultra" value="40" type="int" />
-
-		<node name="right_arm" pkg="mcgreen_control" respawn="true" type="arm_sensors.py"> 
-			<param name="side" value="right"/>
-			<param name="topic" value="right_arm"/>
-		</node>
-
-	</group>
-
 	<machine 
 		name="upper_pi"
 		address="upper_pi"
 		user="upperpi"
 		timeout="10"
 		env-loader="~/upper_ws/devel/remote_env_loader.sh"
+	/>
+
+	<machine 
+		
+		name="lower_pi"
+		address="lower_pi"
+		user="lowerpi"
+		timeout="10"
+		env-loader="~/lower_ws/devel/remote_env_loader.sh"
 	/>
 
 	<node
@@ -49,20 +30,40 @@
 		pkg="mcgreen_control"
 		type="oled.py"
 	/>
+	
+	<node name="face_prime" pkg="rostopic" type="rostopic" args="pub /facial_expression std_msgs/Int16 4"/>
 
-	<machine 
+	<node name="peripheral_manager" pkg="mcgreen_control" respawn="true" type="peripheral_manage.py" />
+
+	<node name="safety_cutoff" pkg="mcgreen_control" respawn="true" type="safety_motor.py" />
+
+	<node name="mode_select" pkg="mcgreen_control" respawn="true" type="mode_select.py">
+ 
+		<param name="speed_multiplier" value="2"/>
+		<param name="joystick_threshold" value="2"/>
+
+	</node>
+	
+	<group ns="peripheral">
+	
+		<param name="rate" value="100" type="int"/>
 		
-		name="lower_pi"
-		address="lower_pi"
-		user="lowerpi"
-		timeout="10"
-		env-loader="~/lower_ws/devel/remote_env_loader.sh"
-	/>
+		<param name="default_ultra" value="80" type="int"/>
 
-	<node
-		machine="lower_pi"
-		name="receiver_data"
-		pkg="mcgreen_control"
-		type="sr.py"
-	/>
+		<param name="threshold_ultra" value="40" type="int" />
+
+		<node name="right_arm" pkg="mcgreen_control" respawn="true" type="arm_sensors.py"> 
+			<param name="side" value="right"/>
+			<param name="topic" value="right_arm"/>
+		</node>
+
+		<node
+			machine="lower_pi"
+			name="receiver_data"
+			pkg="mcgreen_control"
+			type="sr.py"
+		/>
+	</group>
+
+
 </launch>

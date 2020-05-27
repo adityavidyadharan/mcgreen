@@ -6,11 +6,11 @@ from std_msgs.msg import Int16
 class Manager:
     RECEIVER_OUTPUT_TOPIC =  "/receiver_output"
     LEFT_TOPIC = "left_arm_send"
-    RIGHT_TOPIC = "sensor/right_arm" 
+    RIGHT_TOPIC = "peripheral/right_arm" 
     RECEIVER_TOPIC = "/receiver"
     SENSOR_TOPIC = "/sensor_data" 
     FACE_TOPIC = "/facial_expression"
-    initial_ultra=rospy.get_param("sensor/default_ultra")
+    initial_ultra=rospy.get_param("peripheral/default_ultra")
     def __init__(self):
         self.rec_sub = rospy.Subscriber(self.RECEIVER_OUTPUT_TOPIC, Array, self.receiver_callback)
         self.left_sub = rospy.Subscriber(self.LEFT_TOPIC, Arm, self.right_arm_callback)

@@ -16,7 +16,7 @@ class safety_break:
     FEEDBACK_TOPIC = "/safety_feedback"
     FACE_IN="/facial_expression"
     FACE_OUT="/dot_matrix"
-    threshold = rospy.get_param("sensor/threshold_ultra")
+    threshold = rospy.get_param("peripheral/threshold_ultra")
     def __init__(self):
         self.upper_safe = Array()
         self.lower_safe = Array()

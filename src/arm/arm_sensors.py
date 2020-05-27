@@ -39,7 +39,7 @@ class arm_sensors:
 
 if __name__ == "__main__":
     rospy.init_node("right_arm_sensor")
-    args = {"side": rospy.get_param("~side"), "topic": rospy.get_param("~topic"), "rate": rospy.get_param("/sensor/rate")}
+    args = {"side": rospy.get_param("~side"), "topic": rospy.get_param("~topic"), "rate": rospy.get_param("/peripheral/rate")}
     print(args["side"])
     sense = arm_sensors(args["side"], args["topic"])
     r = rospy.Rate(args["rate"])
