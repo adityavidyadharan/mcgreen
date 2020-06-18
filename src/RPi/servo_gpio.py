@@ -25,9 +25,9 @@ class servo_controller:
 		#self.vertical_controller.ChangeDutyCycle(0)
     def servo_callback(self, data):
         print("raw: " + str(data.arr))
-	horizontal_angle = 2 + float(data.arr[2])/18
+	    horizontal_angle = 2 + float(180 - data.arr[2])/18
         vertical_angle=2+float(data.arr[3])/18
-	self.vertical_controller.ChangeDutyCycle(vertical_angle)
+	    self.vertical_controller.ChangeDutyCycle(vertical_angle)
         self.horizontal_controller.ChangeDutyCycle(horizontal_angle)
 	#time.sleep(0.5)
 	#self.vertical_controller.ChangeDutyCycle(0)
