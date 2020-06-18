@@ -50,7 +50,7 @@ class Mode_selector:
         try:
             if self.mode == 1:
                 if self.up_down == 1:
-                    lower_data=self.receiver_joystick
+                    lower_data=self.receiver_joystick[:4]
                     upper_data=self.out_upper.arr
                 if self.up_down == 0:
                     upper_data=self.receiver_joystick[:-2]
